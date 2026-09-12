@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "702593861111",
+    "project_id": "attendance-management-sy-cf8ea",
+    "storage_bucket": "attendance-management-sy-cf8ea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702593861111:android:9e9fec17db13a727729af2",
+        "android_client_info": {
+          "package_name": "com.admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn5LD35hvLsHRKCS3dyUNGrtfz3jRNMn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702593861111:android:d6825cdef7a41173729af2",
+        "android_client_info": {
+          "package_name": "com.vibework"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn5LD35hvLsHRKCS3dyUNGrtfz3jRNMn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
