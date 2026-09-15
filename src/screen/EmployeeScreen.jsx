@@ -19,7 +19,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {pick, types} from '@react-native-documents/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
+const API_BASE_URL = 'https://attendance-backend-11.onrender.com';
 
 const getAvatarUri = avatar => {
   if (!avatar) {

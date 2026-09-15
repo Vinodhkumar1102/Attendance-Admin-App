@@ -19,7 +19,7 @@ import AdminResetPasswordScreen from './src/screen/AdminResetPasswordScreen';
 import AdminPasswordSuccessScreen from './src/screen/AdminPasswordSuccessScreen';
 import AdminTermsAndConditionsScreen from './src/screen/conditions/AdminTermsAndConditionsScreen';
 
-const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
+const API_BASE_URL = 'https://attendance-backend-11.onrender.com';
 
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('login');

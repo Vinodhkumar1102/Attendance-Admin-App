@@ -14,7 +14,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
+const API_BASE_URL = 'https://attendance-backend-11.onrender.com';
 
 const emptyProfile = {
   companyName: '',

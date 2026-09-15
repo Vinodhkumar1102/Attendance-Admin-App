@@ -2,7 +2,7 @@ import React from 'react';
 import {Alert, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
+const API_BASE_URL = 'https://attendance-backend-11.onrender.com';
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const getCompletedMonthOptions = joiningDate => {

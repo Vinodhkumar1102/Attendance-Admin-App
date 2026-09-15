@@ -20,7 +20,7 @@ import LeaveScreen from './LeaveScreen';
 import MoreScreen from './MoreScreen';
 import NotificationScreen from './NotificationScreen';
 
-const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
+const API_BASE_URL = 'https://attendance-backend-11.onrender.com';
 
 const dateKey = (year, month, day) => (
   `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
@@ -164,7 +164,7 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     const loadUnreadNotificationCount = async () => {
       try {
         const [response, storedReadIds, storedDeletedIds] = await Promise.all([
-          fetch('https://attendance-backend-1-2bdo.onrender.com/api/admin/notifications', {headers: {Authorization: `Bearer ${adminToken}`}}),
+          fetch('https://attendance-backend-11.onrender.com/api/admin/notifications', {headers: {Authorization: `Bearer ${adminToken}`}}),
           AsyncStorage.getItem('admin_read_notification_ids'),
           AsyncStorage.getItem('admin_deleted_notification_ids'),
         ]);
