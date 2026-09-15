@@ -22,7 +22,7 @@ const ContactUsScreen = ({onBack, adminToken}) => {
   useEffect(() => {
     const loadContact = async () => {
       try {
-        const response = await fetch('http://192.168.0.102:5000/api/contact', {
+        const response = await fetch('https://attendance-backend-1-2bdo.onrender.com/api/contact', {
           headers: {Authorization: `Bearer ${adminToken}`},
         });
         const result = await response.json();
@@ -75,7 +75,7 @@ const ContactUsScreen = ({onBack, adminToken}) => {
   const updateContact = async () => {
     try {
       setIsUpdating(true);
-      const response = await fetch('http://192.168.0.102:5000/api/contact', {
+      const response = await fetch('https://attendance-backend-1-2bdo.onrender.com/api/contact', {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${adminToken}`,

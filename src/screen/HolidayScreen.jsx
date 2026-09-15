@@ -13,7 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const API_BASE_URL = 'http://192.168.0.102:5000';
+const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
 
 const holidayDateKey = value => String(value).slice(0, 10);
 

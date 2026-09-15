@@ -20,7 +20,7 @@ import LeaveScreen from './LeaveScreen';
 import MoreScreen from './MoreScreen';
 import NotificationScreen from './NotificationScreen';
 
-const API_BASE_URL = 'http://192.168.0.102:5000';
+const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
 
 const dateKey = (year, month, day) => (
   `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
@@ -164,7 +164,7 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     const loadUnreadNotificationCount = async () => {
       try {
         const [response, storedReadIds, storedDeletedIds] = await Promise.all([
-          fetch('http://192.168.0.102:5000/api/admin/notifications', {headers: {Authorization: `Bearer ${adminToken}`}}),
+          fetch('https://attendance-backend-1-2bdo.onrender.com/api/admin/notifications', {headers: {Authorization: `Bearer ${adminToken}`}}),
           AsyncStorage.getItem('admin_read_notification_ids'),
           AsyncStorage.getItem('admin_deleted_notification_ids'),
         ]);
@@ -340,6 +340,76 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     }
   };
 
+  const loadDepartmentUsers = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users`, {
+        headers: {Authorization: `Bearer ${adminToken}`},
+      });
+      const result = await response.json().catch(() => []);
+      if (response.ok && Array.isArray(result)) {
+        setDepartmentUsers(result);
+      }
+    } catch (error) {
+      setDepartmentUsers([]);
+    }
+  };
+
+  const loadLeaveRequests = async () => {
+    try {
+      const [leaveResponse, employeeResponse] = await Promise.all([
+        fetch(`${API_BASE_URL}/api/leaves`, {
+          headers: {Authorization: `Bearer ${adminToken}`},
+        }),
+        fetch(`${API_BASE_URL}/api/employees`, {
+          headers: {Authorization: `Bearer ${adminToken}`},
+        }),
+      ]);
+
+      const leaveResult = await leaveResponse.json().catch(() => ({leaves: []}));
+      const employeeResult = await employeeResponse.json().catch(() => []);
+      const allLeaves = Array.isArray(leaveResult)
+        ? leaveResult
+        : Array.isArray(leaveResult?.leaves)
+          ? leaveResult.leaves
+          : [];
+
+      const pendingLeaves = allLeaves.filter(leave => (leave?.status || '').toLowerCase() === 'pending');
+      const employeeMap = new Map(
+        Array.isArray(employeeResult)
+          ? employeeResult.map(employee => [employee.employeeId, employee])
+          : []
+      );
+
+      const mappedRequests = pendingLeaves.map(leave => {
+        const employee = employeeMap.get(leave.employeeId);
+        return {
+          ...leave,
+          id: leave.id || leave._id,
+          employeeName: leave.employeeName || employee?.fullName || employee?.name || leave.employeeId || 'Employee',
+          avatar: leave.avatar || employee?.avatar || null,
+        };
+      });
+
+      setLeaveRequests(mappedRequests);
+    } catch (error) {
+      setLeaveRequests([]);
+    }
+  };
+
+  const loadHolidays = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/holidays`, {
+        headers: {Authorization: `Bearer ${adminToken}`},
+      });
+      const result = await response.json();
+      if (response.ok && Array.isArray(result)) {
+        setHolidays(result);
+      }
+    } catch (error) {
+      setHolidays([]);
+    }
+  };
+
   const refreshDashboardData = async () => {
     if (!adminToken || refreshing) {
       return;
@@ -371,68 +441,12 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
   }, [adminToken, todayKey]);
 
   useEffect(() => {
-    const loadDepartmentUsers = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/users`, {
-          headers: {Authorization: `Bearer ${adminToken}`},
-        });
-        const result = await response.json();
-        if (response.ok && Array.isArray(result)) {
-          setDepartmentUsers(result);
-        }
-      } catch (error) {
-        setDepartmentUsers([]);
-      }
-    };
-
     if (adminToken) {
       loadDepartmentUsers();
     }
   }, [adminToken]);
 
   useEffect(() => {
-    const loadLeaveRequests = async () => {
-      try {
-        const [leaveResponse, employeeResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/leaves`, {
-            headers: {Authorization: `Bearer ${adminToken}`},
-          }),
-          fetch(`${API_BASE_URL}/api/employees`, {
-            headers: {Authorization: `Bearer ${adminToken}`},
-          }),
-        ]);
-
-        const leaveResult = await leaveResponse.json().catch(() => ({leaves: []}));
-        const employeeResult = await employeeResponse.json().catch(() => []);
-        const allLeaves = Array.isArray(leaveResult)
-          ? leaveResult
-          : Array.isArray(leaveResult?.leaves)
-            ? leaveResult.leaves
-            : [];
-
-        const pendingLeaves = allLeaves.filter(leave => (leave?.status || '').toLowerCase() === 'pending');
-        const employeeMap = new Map(
-          Array.isArray(employeeResult)
-            ? employeeResult.map(employee => [employee.employeeId, employee])
-            : []
-        );
-
-        const mappedRequests = pendingLeaves.map(leave => {
-          const employee = employeeMap.get(leave.employeeId);
-          return {
-            ...leave,
-            id: leave.id || leave._id,
-            employeeName: leave.employeeName || employee?.fullName || employee?.name || leave.employeeId || 'Employee',
-            avatar: leave.avatar || employee?.avatar || null,
-          };
-        });
-
-        setLeaveRequests(mappedRequests);
-      } catch (error) {
-        setLeaveRequests([]);
-      }
-    };
-
     if (adminToken) {
       loadLeaveRequests();
     }
@@ -471,20 +485,6 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
   };
 
   useEffect(() => {
-    const loadHolidays = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/holidays`, {
-          headers: {Authorization: `Bearer ${adminToken}`},
-        });
-        const result = await response.json();
-        if (response.ok && Array.isArray(result)) {
-          setHolidays(result);
-        }
-      } catch (error) {
-        setHolidays([]);
-      }
-    };
-
     if (adminToken) {
       loadHolidays();
     }
@@ -899,31 +899,6 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
         )}
       </View>
 
-      <View style={styles.departmentUsersCard}>
-        <View style={styles.attendanceHeader}>
-          <Text style={styles.attendanceTitle}>Users</Text>
-          <TouchableOpacity activeOpacity={0.8}>
-            <Text style={styles.seeAllText}>View All</Text>
-          </TouchableOpacity>
-        </View>
-        {departmentUsers.length ? departmentUsers.slice(0, 4).map((user, index) => (
-          <View key={user._id || user.email} style={styles.departmentUserRow}>
-            <View style={[styles.departmentUserAvatar, index % 2 ? styles.secondAvatar : styles.firstAvatar]}>
-              {getAvatarUri(user.avatar) ? (
-                <Image source={{uri: getAvatarUri(user.avatar)}} style={styles.departmentUserAvatarImage} />
-              ) : (
-                <Text style={styles.departmentUserInitial}>{user.fullName?.charAt(0) || '?'}</Text>
-              )}
-            </View>
-            <View style={styles.departmentUserDetails}>
-              <Text style={styles.departmentUserName}>{user.fullName}</Text>
-              <Text style={styles.departmentUserRole}>{user.role}{user.department ? ` • ${user.department}` : ''}</Text>
-            </View>
-          </View>
-        )) : (
-          <Text style={styles.noDepartmentUsersText}>No users found</Text>
-        )}
-      </View>
     </>
   );
 

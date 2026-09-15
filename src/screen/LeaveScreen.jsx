@@ -9,8 +9,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const leaveTabs = ['Pending', 'Approved', 'Rejected', 'Cancelled'];
-const API_BASE_URL = 'http://192.168.0.102:5000';
-
+const API_BASE_URL = 'https://attendance-backend-1-2bdo.onrender.com';
 const formatLeaveDates = (startDate, endDate, totalDays) => {
   const formatDate = value => new Intl.DateTimeFormat('en-US', {month: 'short', day: '2-digit'}).format(new Date(value));
   return `${formatDate(startDate)} - ${formatDate(endDate)} (${totalDays} ${totalDays === 1 ? 'Day' : 'Days'})`;

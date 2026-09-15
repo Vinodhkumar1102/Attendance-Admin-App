@@ -19,7 +19,9 @@ import AdminResetPasswordScreen from './src/screen/AdminResetPasswordScreen';
 import AdminPasswordSuccessScreen from './src/screen/AdminPasswordSuccessScreen';
 import AdminTermsAndConditionsScreen from './src/screen/conditions/AdminTermsAndConditionsScreen';
 
-const API_BASE_URL = 'http://192.168.0.102:5000';
+const API_BASE_URL = Platform.OS === 'android'
+  ? 'http://10.0.2.2:5000'
+  : 'http://localhost:5000';
 
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('login');

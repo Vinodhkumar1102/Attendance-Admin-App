@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {generatePDF} from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
 
-const API_BASE_URL = 'http://192.168.0.102:5000';
+const API_BASE_URL ='https://attendance-backend-1-2bdo.onrender.com';
 const getMonthLabel = date => {
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
