@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
@@ -260,7 +260,7 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     ? Math.round((attendanceSummary.leave / graphTotal) * 100)
     : 0;
 
-  const loadEmployeeCount = async () => {
+  const loadEmployeeCount = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/employees`, {
         headers: {Authorization: `Bearer ${adminToken}`},
@@ -272,9 +272,9 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     } catch (error) {
       setEmployeeCount(0);
     }
-  };
+  }, [adminToken]);
 
-  const loadCompanyProfile = async () => {
+  const loadCompanyProfile = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/company-profile`, {
         headers: {Authorization: `Bearer ${adminToken}`},
@@ -287,9 +287,9 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     } catch (error) {
       setCompanyProfileName('Manager');
     }
-  };
+  }, [adminToken]);
 
-  const loadAttendanceSummary = async () => {
+  const loadAttendanceSummary = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/attendance/admin-summary?date=${todayKey}`, {
         headers: {Authorization: `Bearer ${adminToken}`},
@@ -307,9 +307,9 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     } catch (error) {
       setAttendanceSummary({present: 0, halfDay: 0, late: 0, absent: 0, leave: 0});
     }
-  };
+  }, [adminToken, todayKey]);
 
-  const loadCheckedInEmployees = async () => {
+  const loadCheckedInEmployees = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/attendance/admin-records?date=${todayKey}`, {
         headers: {Authorization: `Bearer ${adminToken}`},
@@ -338,9 +338,9 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
       setAbsentEmployees([]);
       setLeaveEmployees([]);
     }
-  };
+  }, [adminToken, todayKey]);
 
-  const loadDepartmentUsers = async () => {
+  const loadDepartmentUsers = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/users`, {
         headers: {Authorization: `Bearer ${adminToken}`},
@@ -352,9 +352,9 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     } catch (error) {
       setDepartmentUsers([]);
     }
-  };
+  }, [adminToken]);
 
-  const loadLeaveRequests = async () => {
+  const loadLeaveRequests = useCallback(async () => {
     try {
       const [leaveResponse, employeeResponse] = await Promise.all([
         fetch(`${API_BASE_URL}/api/leaves`, {
@@ -394,9 +394,9 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     } catch (error) {
       setLeaveRequests([]);
     }
-  };
+  }, [adminToken]);
 
-  const loadHolidays = async () => {
+  const loadHolidays = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/holidays`, {
         headers: {Authorization: `Bearer ${adminToken}`},
@@ -408,9 +408,9 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     } catch (error) {
       setHolidays([]);
     }
-  };
+  }, [adminToken]);
 
-  const refreshDashboardData = async () => {
+  const refreshDashboardData = useCallback(async () => {
     if (!adminToken || refreshing) {
       return;
     }
@@ -429,7 +429,7 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [adminToken, loadCompanyProfile, loadAttendanceSummary, loadCheckedInEmployees, loadDepartmentUsers, loadEmployeeCount, loadHolidays, loadLeaveRequests, refreshing]);
 
   useEffect(() => {
     if (adminToken) {
@@ -438,19 +438,19 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
       loadAttendanceSummary();
       loadCheckedInEmployees();
     }
-  }, [adminToken, todayKey]);
+  }, [adminToken, loadAttendanceSummary, loadCheckedInEmployees, loadCompanyProfile, loadEmployeeCount]);
 
   useEffect(() => {
     if (adminToken) {
       loadDepartmentUsers();
     }
-  }, [adminToken]);
+  }, [adminToken, loadDepartmentUsers]);
 
   useEffect(() => {
     if (adminToken) {
       loadLeaveRequests();
     }
-  }, [adminToken]);
+  }, [adminToken, loadLeaveRequests]);
 
   const updateLeaveRequestStatus = async (leaveId, status) => {
     try {
@@ -488,7 +488,7 @@ const DashboardScreen = ({adminToken, onLogout, themeMode = 'light', onToggleThe
     if (adminToken) {
       loadHolidays();
     }
-  }, [adminToken]);
+  }, [adminToken, loadHolidays]);
 
   const getGreetingText = () => {
     const hour = new Date().getHours();

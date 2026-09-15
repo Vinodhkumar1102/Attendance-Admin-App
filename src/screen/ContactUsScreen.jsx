@@ -47,7 +47,7 @@ const ContactUsScreen = ({onBack, adminToken}) => {
 
     const timeout = setTimeout(async () => {
       try {
-        await fetch('http://192.168.0.102:5000/api/contact', {
+        await fetch('https://attendance-backend-1-2bdo.onrender.com/api/contact', {
           method: 'PUT',
           headers: {
             Authorization: `Bearer ${adminToken}`,
